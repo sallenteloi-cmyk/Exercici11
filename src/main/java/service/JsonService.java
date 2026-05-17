@@ -1,5 +1,6 @@
 package service;
 
+import dao.ArticleDAO;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -8,8 +9,15 @@ import java.io.FileReader;
 
 public class JsonService {
 
-    // Mètode per llegir el fitxer JSON
+    private ArticleDAO articleDAO = new ArticleDAO();
+
+    // Mètode per llegir el fitxer JSON i carregar-lo a la base de dades
     public void llegirJson() {
+
+        int afegits = 0;
+        int actualitzats = 0;
+        int camises = 0;
+        int pantalons = 0;
 
         try {
 
@@ -25,26 +33,60 @@ public class JsonService {
             // Recórrer tots els articles del JSON
             for (int i = 0; i < articles.size(); i++) {
 
-                // Convertir cada article en JSONObject
                 JSONObject article = (JSONObject) articles.get(i);
 
-                // Mostrar informació per pantalla
-                System.out.println("------------------------");
-                System.out.println("ID: " + article.get("id"));
-                System.out.println("Nom: " + article.get("nom"));
-                System.out.println("Familia: " + article.get("familia"));
-                System.out.println("Preu base: " + article.get("preu_base"));
-                System.out.println("Stock: " + article.get("stock"));
+                int id = ((Long) article.get("id")).intValue();
+                String nom = (String) article.get("nom");
+                String familia = (String) article.get("familia");
+                double preuBase = ((Number) article.get("preu_base")).doubleValue();
+                int iva = ((Long) article.get("iva")).intValue();
+                int stock = ((Long) article.get("stock")).intValue();
 
+                Integer tallaColl = null;
+                Integer ampladaPit = null;
+                Integer tallaCintura = null;
+                Integer llargadaCamal = null;
+
+                if (familia.equalsIgnoreCase("camisa")) {
+
+                    camises++;
+
+                    tallaColl = ((Long) article.get("talla_coll")).intValue();
+                    ampladaPit = ((Long) article.get("amplada_pit")).intValue();
+
+                } else if (familia.equalsIgnoreCase("pantaló")) {
+
+                    pantalons++;
+
+                    tallaCintura = ((Long) article.get("talla_cintura")).intValue();
+                    llargadaCamal = ((Long) article.get("llargada_camal")).intValue();
+                }
+
+                boolean existeix = articleDAO.existeixArticle(id);
+
+                articleDAO.inserirOActualitzarArticle(
+                        id, nom, familia,
+                        tallaColl, ampladaPit,
+                        tallaCintura, llargadaCamal,
+                        preuBase, iva, stock
+                );
+
+                if (existeix) {
+                    actualitzats++;
+                } else {
+                    afegits++;
+                }
             }
+
+            System.out.println("Articles tipus camisa carregats: " + camises);
+            System.out.println("Articles tipus pantaló carregats: " + pantalons);
+            System.out.println("Articles afegits: " + afegits);
+            System.out.println("Articles actualitzats: " + actualitzats);
 
         } catch (Exception e) {
 
-            // Mostrar error si falla la lectura del JSON
+            System.out.println("Error llegint o important el JSON");
             e.printStackTrace();
-
         }
-
     }
-
 }

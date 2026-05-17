@@ -7,6 +7,8 @@ public class MenuService {
     // Scanner per llegir dades per teclat
     Scanner e = new Scanner(System.in);
 
+    private TiquetService tiquetService = new TiquetService();
+
     // Mètode principal del menú
     public void principal() {
 
@@ -44,7 +46,7 @@ public class MenuService {
 
                 case 3:
 
-                    System.out.println("Gestió de Vendes-Tiquets");
+                    tiquetService.realitzarVenda();
 
                     break;
 
