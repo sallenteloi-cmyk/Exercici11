@@ -12,7 +12,7 @@ public class JsonService {
     private ArticleDAO articleDAO = new ArticleDAO();
 
     // Mètode per llegir el fitxer JSON i carregar-lo a la base de dades
-    public void llegirJson() {
+    public void inicialitzarArticles() {
 
         int afegits = 0;
         int actualitzats = 0;
@@ -78,6 +78,7 @@ public class JsonService {
                 }
             }
 
+            System.out.println("Inicialització automàtica d'articles completada.");
             System.out.println("Articles tipus camisa carregats: " + camises);
             System.out.println("Articles tipus pantaló carregats: " + pantalons);
             System.out.println("Articles afegits: " + afegits);

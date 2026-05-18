@@ -21,7 +21,7 @@ public class Main {
             JsonService jsonService = new JsonService();
 
             // Llegir el fitxer JSON
-            jsonService.llegirJson();
+            jsonService.inicialitzarArticles();
 
             // Crear objecte MenuService
             MenuService menuService = new MenuService();

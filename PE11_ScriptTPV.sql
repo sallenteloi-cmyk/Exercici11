@@ -81,3 +81,10 @@ CREATE TABLE linies_factura (
     CHECK (quantitat > 0),
     CHECK (iva BETWEEN 4 AND 21)
 );
+
+USE tpv_botiga;
+
+SELECT * FROM tiquets;
+SELECT * FROM linies_factura;
+SELECT id, stock FROM articles WHERE id = 1;
+SELECT id, nom, stock FROM articles WHERE stock > 0;
