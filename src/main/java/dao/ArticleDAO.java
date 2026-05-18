@@ -170,4 +170,39 @@ public class ArticleDAO {
 
         return -1;
     }
+
+    // Mostra el resum de vendes d'un article
+    public void consultarVendesPerArticle(int idArticle) {
+
+        String sql = "SELECT a.id, a.nom, IFNULL(SUM(l.quantitat), 0) AS quantitat_venuda " +
+                "FROM articles a " +
+                "LEFT JOIN linies_factura l ON a.id = l.id_article " +
+                "WHERE a.id = ? " +
+                "GROUP BY a.id, a.nom";
+
+        try (Connection conn = ConnexioBD.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, idArticle);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+
+                System.out.println("\n===== CONSULTA VENDES PER ARTICLE =====");
+                System.out.println("ID article: " + rs.getInt("id"));
+                System.out.println("Nom article: " + rs.getString("nom"));
+                System.out.println("Quantitat venuda: " + rs.getInt("quantitat_venuda"));
+
+            } else {
+
+                System.out.println("Aquest article no existeix.");
+            }
+
+        } catch (SQLException e) {
+
+            System.out.println("Error consultant vendes per article");
+            e.printStackTrace();
+        }
+    }
 }

@@ -36,4 +36,42 @@ public class ClientDAO {
             return false;
         }
     }
+
+    // Mostra el resum de vendes d'un client
+    public void consultarVendesPerClient(String dniClient) {
+
+        String sql = "SELECT c.dni, c.nom, COUNT(t.id) AS nombre_tiquets, " +
+                "IFNULL(SUM(t.total_final), 0) AS total_despesa " +
+                "FROM clients c " +
+                "LEFT JOIN tiquets t ON c.dni = t.dni_client " +
+                "WHERE c.dni = ? " +
+                "GROUP BY c.dni, c.nom";
+
+        try (Connection conn = ConnexioBD.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, dniClient);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+
+                System.out.println("\n===== CONSULTA VENDES PER CLIENT =====");
+                System.out.println("DNI: " + rs.getString("dni"));
+                System.out.println("Nom: " + rs.getString("nom"));
+                System.out.println("Nombre de tiquets: " + rs.getInt("nombre_tiquets"));
+                System.out.println("Total despesa: " + rs.getDouble("total_despesa") + " €");
+
+            } else {
+
+                System.out.println("Aquest client no existeix.");
+            }
+
+        } catch (SQLException e) {
+
+            System.out.println("Error consultant vendes per client");
+            e.printStackTrace();
+        }
+    }
+
 }

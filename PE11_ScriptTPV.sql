@@ -74,7 +74,6 @@ CREATE TABLE linies_factura (
     preu_base DECIMAL(10,2) NOT NULL,
     iva INT NOT NULL,
     preu_final DECIMAL(10,2) NOT NULL,
-
     FOREIGN KEY (id_tiquet) REFERENCES tiquets(id) ON DELETE CASCADE,
     FOREIGN KEY (id_article) REFERENCES articles(id),
 
@@ -86,5 +85,5 @@ USE tpv_botiga;
 
 SELECT * FROM tiquets;
 SELECT * FROM linies_factura;
-SELECT id, stock FROM articles WHERE id = 1;
 SELECT id, nom, stock FROM articles WHERE stock > 0;
+select * from clients;

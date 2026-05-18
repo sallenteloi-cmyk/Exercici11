@@ -1,6 +1,8 @@
 package service;
 
 import java.util.Scanner;
+import dao.ClientDAO;
+import dao.ArticleDAO;
 
 public class MenuService {
 
@@ -8,6 +10,8 @@ public class MenuService {
     Scanner e = new Scanner(System.in);
 
     private TiquetService tiquetService = new TiquetService();
+    private ClientDAO clientDAO = new ClientDAO();
+    private ArticleDAO articleDAO = new ArticleDAO();
 
     // Mètode principal del menú
     public void principal() {
@@ -15,7 +19,6 @@ public class MenuService {
         int opcio;
 
         do {
-
             // Mostrar menú principal
             menu();
 
@@ -58,8 +61,15 @@ public class MenuService {
 
                 case 5:
 
-                    System.out.println("Sortint del programa...");
+                    consultarVendesPerClient();
 
+                    break;
+                case 6:
+                    consultarVendesPerArticle();
+                    break;
+
+                case 7:
+                    System.out.println("Sortint del programa...");
                     break;
 
                 default:
@@ -67,7 +77,7 @@ public class MenuService {
                     System.out.println("Opció no vàlida");
             }
 
-        } while (opcio != 5);
+        } while (opcio != 7);
     }
 
     // Mostrar menú principal
@@ -79,7 +89,9 @@ public class MenuService {
         System.out.println("2. Clients");
         System.out.println("3. Vendes-Tiquets");
         System.out.println("4. Vendes-Línies de factura");
-        System.out.println("5. Sortir");
+        System.out.println("5. Consulta vendes per client");
+        System.out.println("6. Consulta vendes per article");
+        System.out.println("7. Sortir");
     }
 
     // Mostrar menú articles
@@ -134,5 +146,23 @@ public class MenuService {
             case 4 -> System.out.println("Tornant...");
             default -> System.out.println("Opció no vàlida");
         }
+    }
+
+    public void consultarVendesPerClient() {
+
+        e.nextLine();
+
+        System.out.print("Introdueix el DNI del client: ");
+        String dniClient = e.nextLine();
+
+        clientDAO.consultarVendesPerClient(dniClient);
+    }
+
+    public void consultarVendesPerArticle() {
+
+        System.out.print("Introdueix l'ID de l'article: ");
+        int idArticle = e.nextInt();
+
+        articleDAO.consultarVendesPerArticle(idArticle);
     }
 }
